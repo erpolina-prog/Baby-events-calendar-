@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NW3 Baby Calendar 🍼</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  body { background: #f5f7fa; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  .container { max-width: 560px; width: 100%; padding: 32px 20px; }
+  
+  .hero { text-align: center; margin-bottom: 28px; }
+  .hero .emoji { font-size: 48px; }
+  .hero h1 { font-size: 26px; margin: 10px 0 6px; color: #1a1a2e; }
+  .hero p { color: #666; font-size: 14px; line-height: 1.5; }
+  .hero .badge { display: inline-block; background: #e8f4fd; color: #1a73e8; font-size: 13px; padding: 4px 12px; border-radius: 20px; margin-top: 8px; font-weight: 500; }
+  
+  .card { background: white; border-radius: 16px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; }
+  .card h2 { font-size: 16px; margin-bottom: 14px; color: #1a1a2e; display: flex; align-items: center; gap: 8px; }
+  .card h2 .icon { font-size: 20px; }
+
+  /* Age input */
+  .age-input-row { display: flex; gap: 10px; margin-bottom: 4px; }
+  .age-input-row input {
+    flex: 1; padding: 12px 16px; border: 2px solid #e0e0e0; border-radius: 12px;
+    font-size: 16px; outline: none; transition: border-color 0.2s;
+  }
+  .age-input-row input:focus { border-color: #1a73e8; }
+  .age-input-row input::placeholder { color: #aaa; }
+  .age-input-row button {
+    padding: 12px 24px; background: #1a73e8; color: white; border: none;
+    border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.2s;
+  }
+  .age-input-row button:hover { background: #1557b0; }
+  .age-input-row button:disabled { background: #999; cursor: not-allowed; }
+
+  .result-box { display: none; margin-top: 12px; }
+  .result-box.show { display: block; }
+
+  .calendar-btn {
+    display: inline-flex; align-items: center; gap: 10px; background: #1a73e8; color: white;
+    text-decoration: none; padding: 14px 28px; border-radius: 12px; font-size: 16px; font-weight: 500; transition: background 0.2s;
+  }
+  .calendar-btn:hover { background: #1557b0; }
+  .calendar-btn .icon { font-size: 22px; }
+
+  .age-tag { display: inline-block; background: #e8f4fd; color: #1a73e8; font-size: 13px; padding: 3px 10px; border-radius: 20px; margin: 8px 0 12px; }
+
+  .event-preview { margin-top: 14px; }
+  .event-preview h3 { font-size: 12px; color: #888; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+  .event-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+  .event-item:last-child { border-bottom: none; }
+  .event-item .ev-emoji { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .event-item .ev-name { font-weight: 500; }
+  .event-item .ev-detail { color: #888; font-size: 12px; }
+
+  /* Places section */
+  .place-card { background: #f8fafc; border-radius: 10px; padding: 14px; margin-bottom: 10px; border: 1px solid #eef2f6; }
+  .place-card:last-child { margin-bottom: 0; }
+  .place-card h3 { font-size: 14px; margin-bottom: 3px; }
+  .place-card .place-addr { color: #888; font-size: 12px; margin-bottom: 6px; }
+  .place-card .place-desc { color: #555; font-size: 13px; line-height: 1.4; }
+  .place-card .place-tags { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .place-card .place-tag { background: #e8f4fd; color: #1a73e8; font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+
+  /* Contribute */
+  .contribute-input { width: 100%; min-height: 80px; padding: 12px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 14px; outline: none; resize: vertical; }
+  .contribute-input:focus { border-color: #1a73e8; }
+  .contribute-row { display: flex; gap: 10px; align-items: flex-start; margin-top: 10px; }
+  .contribute-row input[type=email] { flex: 1; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; outline: none; }
+  .contribute-row input:focus { border-color: #1a73e8; }
+  .contribute-btn { padding: 10px 20px; background: #34a853; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .contribute-btn:hover { background: #2d8f47; }
+  .contribute-note { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.4; }
+  .contribute-success { display: none; color: #34a853; font-size: 14px; font-weight: 500; margin-top: 8px; }
+  .contribute-success.show { display: block; }
+
+  /* Email section */
+  .email-section { margin-top: 14px; padding: 16px; background: #fafbfc; border-radius: 12px; border: 1px dashed #ddd; }
+  .email-section p { font-size: 13px; color: #555; margin-bottom: 10px; line-height: 1.5; }
+  .email-input-group { display: flex; gap: 8px; }
+  .email-input-group input { flex: 1; padding: 10px 14px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; outline: none; }
+  .email-input-group input:focus { border-color: #1a73e8; }
+  .email-input-group button { padding: 10px 20px; background: #34a853; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
+  .email-input-group button:hover { background: #2d8f47; }
+  .email-note { font-size: 11px; color: #aaa; margin-top: 6px; font-style: italic; }
+
+  .footer { text-align: center; padding: 24px 0 12px; color: #999; font-size: 12px; line-height: 1.6; }
+  .footer a { color: #1a73e8; text-decoration: none; }
+
+  @media (max-width: 480px) {
+    .container { padding: 20px 16px; }
+    .card { padding: 18px 16px; }
+    .age-input-row { flex-direction: column; }
+    .age-input-row button { width: 100%; text-align: center; }
+    .contribute-row { flex-direction: column; }
+    .email-input-group { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="hero">
+    <div class="emoji">🍼</div>
+    <h1>NW3 Baby Calendar</h1>
+    <p>Custom Google Calendar with baby & toddler classes around Hampstead, Swiss Cottage, and West Hampstead</p>
+    <div class="badge">📍 NW3, London · Free · Non-profit</div>
+  </div>
+
+  <!-- SECTION 1: Calendar -->
+  <div class="card">
+    <h2><span class="icon">📅</span> Get your personalised calendar</h2>
+
+    <div class="age-input-row">
+      <input type="text" id="ageInput" placeholder="How old is your baby? (e.g. 10 months, 2 years)" autocomplete="off" />
+      <button id="getCalendarBtn" onclick="handleAgeSubmit()">Get calendar →</button>
+    </div>
+    <p style="font-size: 12px; color: #aaa; margin-top: 4px;">Enter age in months or years — we'll find the right classes</p>
+
+    <div class="result-box" id="resultBox">
+      <div style="text-align: center;">
+        <span class="age-tag" id="ageTag">👶 0–12 months</span><br>
+        <a class="calendar-btn" id="calendarLink" target="_blank">
+          <span class="icon">📅</span>
+          Add to Google Calendar
+        </a>
+      </div>
+      <div class="event-preview" id="eventPreview">
+        <h3>✨ What's included</h3>
+        <div id="eventList"></div>
+      </div>
+      <div class="email-section">
+        <p>📬 We'll also send you a list of <strong>free places to hang out with your baby</strong> in NW3 — parks, libraries, cafes. No marketing, ever — this is a free pet project.</p>
+        <div class="email-input-group">
+          <input type="email" id="emailInput" placeholder="your@email.com (optional)" />
+          <button onclick="submitEmail()">Send me the list →</button>
+        </div>
+        <div class="email-note">Your email will not be used for marketing or shared with anyone. Free community project.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: Places -->
+  <div class="card">
+    <h2><span class="icon">☕</span> Places to go with a baby in NW3</h2>
+
+    <div class="place-card">
+      <h3>📚 Swiss Cottage Library</h3>
+      <div class="place-addr">88 Avenue Road, NW3 3HA</div>
+      <div class="place-desc">Free Rhyme Time (Tue/Fri 10:30), Stay & Play (Wed 10:30), dedicated children's library with books and toys. Warm, quiet space.</div>
+      <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Indoor</span></div>
+    </div>
+
+    <div class="place-card">
+      <h3>🏛️ Keats Community Library</h3>
+      <div class="place-addr">10 Keats Grove, NW3 2RR</div>
+      <div class="place-desc">Community library in a lovely old building. Rhyme Time Tue/Fri 11:00 (£5), dedicated children's area. Very family-friendly.</div>
+      <div class="place-tags"><span class="place-tag">£5</span><span class="place-tag">Community feel</span></div>
+    </div>
+
+    <div class="place-card">
+      <h3>🧩 JW3</h3>
+      <div class="place-addr">341-351 Finchley Road, NW3 6ET</div>
+      <div class="place-desc">Big sandpit on the lower ground floor! Also a cafe, library, and children's events throughout the week. Indoor play area, warm and spacious.</div>
+      <div class="place-tags"><span class="place-tag">Sandpit</span><span class="place-tag">Cafe</span><span class="place-tag">Indoor</span></div>
+    </div>
+
+    <div class="place-card">
+      <h3>🎨 Camden Art Centre</h3>
+      <div class="place-addr">Arkwright Road, NW3 6DG</div>
+      <div class="place-desc">Beautiful green lawn where you can sit with a coffee while babies play. Art exhibitions, family workshops on weekends. Calm, creative atmosphere.</div>
+      <div class="place-tags"><span class="place-tag">Green space</span><span class="place-tag">Free</span><span class="place-tag">Cafe</span></div>
+    </div>
+
+    <div class="place-card">
+      <h3>🌳 Hampstead Heath</h3>
+      <div class="place-addr">NW3 (multiple entrances)</div>
+      <div class="place-desc">Huge green space with ponds, playgrounds (Parliament Hill, Highgate), and the Heath cafe. Perfect for picnics and baby's first nature experience.</div>
+      <div class="place-tags"><span class="place-tag">Outdoor</span><span class="place-tag">Free</span><span class="place-tag">Playground</span></div>
+    </div>
+
+    <div class="place-card">
+      <h3>🎪 O2 Centre Soft Play</h3>
+      <div class="place-addr">255 Finchley Road, NW3 6LU</div>
+      <div class="place-desc">Free soft play area in the shopping centre, right next to Mini Mozart classes. Warm indoor space, free, with cafe nearby.</div>
+      <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Soft play</span><span class="place-tag">Indoor</span></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: Contribute -->
+  <div class="card">
+    <h2><span class="icon">💡</span> Contribute</h2>
+    <p style="font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 12px;">
+      This is a non-profit pet project by one of the mums in the neighbourhood. 
+      Know a place or class that's not included? Got feedback? Drop it below — we'll add it! ✨
+    </p>
+    <textarea class="contribute-input" id="feedbackInput" placeholder="Tell us about a place, class, or anything else..."></textarea>
+    <div class="contribute-row">
+      <input type="email" id="feedbackEmail" placeholder="your@email.com (if you want a reply)" />
+      <button class="contribute-btn" onclick="submitFeedback()">Send →</button>
+    </div>
+    <div class="contribute-note">No spam, no marketing — just making this better for all NW3 families ❤️</div>
+    <div class="contribute-success" id="feedbackSuccess">✅ Got it! Thanks for helping improve the calendar.</div>
+  </div>
+
+  <div class="footer">
+    <p>Made with ❤️ for NW3 families · <a href="https://github.com/quiker/camden-baby-calendar">GitHub</a></p>
+    <p>Classes and places are collected from open sources — always double-check with providers</p>
+  </div>
+</div>
+
+<script>
+const CALENDARS = {
+  'baby': {
+    id: '8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
+    link: 'https://calendar.google.com/calendar/u/0?cid=8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
+    tag: '👶 0–12 months',
+    events: [
+      { emoji: '🎵', name: 'Hartbeeps Baby Beeps & Bells', detail: 'Kensal Green · Primrose Hill · West Hampstead' },
+      { emoji: '🎵', name: 'Family Music (Curiouser)', detail: 'Hampstead · Mon 10:00' },
+      { emoji: '🎨', name: 'Messy Monkeys (Curiouser)', detail: 'Hampstead · Mon 11:00 + Fri 9:30' },
+      { emoji: '🎶', name: 'Baby Music (Curiouser)', detail: 'Hampstead · Fri 15:25' },
+      { emoji: '🔬', name: 'Discoveries (Curiouser)', detail: 'Hampstead · Thu 16:00 · biweekly' },
+      { emoji: '🐛', name: 'Little Gym — Bugs', detail: 'Hampstead · Tue–Fri · 10–18mo' },
+      { emoji: '🏊', name: 'Parent & Baby Swim', detail: 'Getset Swim · Fri 10:00+11:00' },
+      { emoji: '🏊', name: 'Swimbies Dippers (3–12m)', detail: 'Swiss Cottage · Mon 12:00' },
+      { emoji: '🎵', name: 'Mini Mozart Babies', detail: 'Hampstead · Fri 10:25' },
+      { emoji: '👶', name: 'Baby Play + Baby Bonding', detail: 'Camden Children\'s Centres · free' },
+      { emoji: '👫', name: 'Fun for All', detail: 'Camden centres · under 5s · free' },
+      { emoji: '🎵', name: 'Rhyme Time', detail: 'Swiss Cottage, Kentish Town, Keats & more' },
+    ]
+  },
+  'toddler': {
+    id: '4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
+    link: 'https://calendar.google.com/calendar/u/0?cid=4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
+    tag: '🚶 1–3 years',
+    events: [
+      { emoji: '🐦', name: 'Little Gym — Birds', detail: 'Hampstead · 6 days a week · 10–18mo' },
+      { emoji: '🎵', name: 'Hartbeeps Happy House', detail: 'West Hampstead · Wed · walkers+' },
+      { emoji: '🎵', name: 'Hartbeeps Baby Beeps', detail: 'West Hampstead · Wed & Primrose Hill Tue' },
+      { emoji: '🚶', name: 'Toddler Time', detail: 'Camden Children\'s Centres · under 2s · free' },
+      { emoji: '👫', name: 'Fun for All', detail: 'Camden centres · under 5s · free' },
+      { emoji: '🏊', name: 'Parent & Toddler Swim', detail: 'Getset Swim · Fri 10:00+11:00' },
+      { emoji: '🏊', name: 'Swimbies Splashers & Paddlers', detail: 'Kentish Town · 13mo–3yrs · £43.50/mo' },
+      { emoji: '🎵', name: 'Mini Mozart Toddlers', detail: 'Hampstead · Fri 09:30' },
+      { emoji: '🎵', name: 'Rhyme Time', detail: 'All local libraries · weekly' },
+    ]
+  }
+};
+
+let currentAge = null;
+
+document.getElementById('ageInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') handleAgeSubmit();
+});
+
+function parseAge(text) {
+  text = text.toLowerCase().trim();
+  
+  // "10 months" or "10 month"
+  let m = text.match(/(\d+)\s*months?\b/);
+  if (m) {
+    let months = parseInt(m[1]);
+    if (months < 12) return { group: 'baby', label: months + ' months' };
+    else return { group: 'toddler', label: months + ' months' };
+  }
+  
+  // "2 years" or "2 year" or "2 yrs" or "2 yo"
+  m = text.match(/(\d+)\s*(years?|yrs?|yo)\b/);
+  if (m) {
+    let years = parseInt(m[1]);
+    let months = years * 12;
+    return { group: 'toddler', label: years + ' year' + (years > 1 ? 's' : '') };
+  }
+  
+  // Just a number — assume months
+  m = text.match(/^(\d+)$/);
+  if (m) {
+    let months = parseInt(m[1]);
+    if (months < 12) return { group: 'baby', label: months + ' months' };
+    else return { group: 'toddler', label: months + ' months' };
+  }
+  
+  // "1.5" or "1,5" — assume years
+  m = text.match(/^(\d+)[.,](\d+)$/);
+  if (m) {
+    return { group: 'toddler', label: text + ' years' };
+  }
+  
+  return null;
+}
+
+function handleAgeSubmit() {
+  const input = document.getElementById('ageInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const parsed = parseAge(text);
+  if (!parsed) {
+    input.style.borderColor = '#e74c3c';
+    input.placeholder = 'Please enter e.g. "10 months" or "2 years"';
+    setTimeout(() => { input.style.borderColor = '#e0e0e0'; }, 1500);
+    return;
+  }
+  
+  const cal = CALENDARS[parsed.group];
+  const resultBox = document.getElementById('resultBox');
+  resultBox.classList.add('show');
+  
+  document.getElementById('ageTag').textContent = parsed.group === 'baby' ? '👶 ' + parsed.label : '🚶 ' + parsed.label;
+  document.getElementById('calendarLink').href = cal.link;
+  
+  const eventList = document.getElementById('eventList');
+  eventList.innerHTML = cal.events.map(e =>
+    `<div class="event-item">
+      <span class="ev-emoji">${e.emoji}</span>
+      <div>
+        <span class="ev-name">${e.name}</span>
+        <div class="ev-detail">${e.detail}</div>
+      </div>
+    </div>`
+  ).join('');
+  
+  // Scroll to result
+  resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function submitEmail() {
+  const input = document.getElementById('emailInput');
+  const email = input.value.trim();
+  if (!email) return;
+  // In production: send to backend
+  input.value = '';
+  alert('✅ We\'ll send the free places list to ' + email + '!');
+}
+
+function submitFeedback() {
+  const input = document.getElementById('feedbackInput');
+  const email = document.getElementById('feedbackEmail').value.trim();
+  const text = input.value.trim();
+  if (!text) return;
+  // In production: send to backend
+  input.value = '';
+  document.getElementById('feedbackEmail').value = '';
+  document.getElementById('feedbackSuccess').classList.add('show');
+  setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
