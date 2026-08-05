@@ -76,6 +76,18 @@
   .event-item .ev-name { font-weight: 500; }
   .event-item .ev-detail { color: #888; font-size: 12px; }
 
+  /* Collapsed event list — only the first few show until expanded */
+  .event-item.extra { display: none; }
+  #eventList.expanded .event-item.extra { display: flex; }
+  .event-toggle {
+    display: block; width: 100%; margin-top: 8px; padding: 8px 0;
+    background: none; border: none; border-top: 1px solid #f0f0f0;
+    color: #1a73e8; font-size: 13px; font-weight: 500; cursor: pointer; text-align: center;
+  }
+  .event-toggle:hover { color: #1557b0; }
+  .event-toggle .chev { display: inline-block; margin-left: 4px; transition: transform 0.2s; }
+  .event-toggle[aria-expanded="true"] .chev { transform: rotate(180deg); }
+
   /* Places section */
   .place-card { background: #f8fafc; border-radius: 10px; padding: 14px; margin-bottom: 10px; border: 1px solid #eef2f6; }
   .place-card:last-child { margin-bottom: 0; }
@@ -179,6 +191,7 @@
       <div class="event-preview" id="eventPreview">
         <h3>✨ What's included</h3>
         <div id="eventList"></div>
+        <button type="button" class="event-toggle" id="eventToggle" aria-expanded="false" aria-controls="eventList" hidden></button>
       </div>
       <div class="email-section">
         <p>📬 Class timetables change when the <strong>September term</strong> starts. Add your email and we'll send you the updated calendar as soon as it's ready.</p>
@@ -319,6 +332,9 @@ ageButtons.forEach(btn => {
   });
 });
 
+// How many events to show before the list needs expanding.
+const PREVIEW_COUNT = 3;
+
 function showCalendar(age) {
   const cal = CALENDARS[age];
   if (!cal) return;
@@ -326,8 +342,9 @@ function showCalendar(age) {
   $('calendarLink').href = cal.link;
 
   // Built from the hardcoded CALENDARS data above — no user input reaches here.
-  $('eventList').innerHTML = cal.events.map(e =>
-    `<div class="event-item">
+  const list = $('eventList');
+  list.innerHTML = cal.events.map((e, i) =>
+    `<div class="event-item${i >= PREVIEW_COUNT ? ' extra' : ''}">
       <span class="ev-emoji">${e.emoji}</span>
       <div>
         <span class="ev-name">${e.name}</span>
@@ -336,10 +353,33 @@ function showCalendar(age) {
     </div>`
   ).join('');
 
+  // Switching age group re-renders, so always collapse back to the preview.
+  list.classList.remove('expanded');
+  setToggle(false, cal.events.length);
+
   const resultBox = $('resultBox');
   resultBox.classList.add('show');
   resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+function setToggle(expanded, total) {
+  const btn = $('eventToggle');
+  if (total <= PREVIEW_COUNT) {
+    btn.hidden = true;
+    return;
+  }
+  btn.hidden = false;
+  btn.setAttribute('aria-expanded', String(expanded));
+  btn.innerHTML = expanded
+    ? 'Show less <span class="chev">▾</span>'
+    : `Show all ${total} <span class="chev">▾</span>`;
+}
+
+$('eventToggle').addEventListener('click', () => {
+  if (!selectedAge) return;
+  const expanded = $('eventList').classList.toggle('expanded');
+  setToggle(expanded, CALENDARS[selectedAge].events.length);
+});
 
 /* ---------- Status helpers ---------- */
 
