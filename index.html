@@ -33,6 +33,17 @@
   .hero .badge { display: inline-block; background: #e8f4fd; color: #1a73e8; font-size: 13px; padding: 4px 12px; border-radius: 20px; margin-top: 8px; font-weight: 500; }
 
   .card { background: white; border-radius: 16px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; }
+
+  /* How it works */
+  .how { background: #fff; border: 1px solid #e6ecf3; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
+  .how h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: #8a94a3; font-weight: 600; margin-bottom: 10px; }
+  .how ol { list-style: none; counter-reset: step; }
+  .how li { counter-increment: step; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #555; padding: 4px 0; }
+  .how li::before {
+    content: counter(step); flex-shrink: 0; width: 19px; height: 19px; margin-top: 1px;
+    border-radius: 50%; background: #e8f4fd; color: #1a73e8;
+    font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+  }
   .card h2 { font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .card h2 .icon { font-size: 20px; }
 
@@ -123,6 +134,16 @@
     <h1>NW3 Baby Calendar</h1>
     <p>Free Google Calendar with baby &amp; toddler classes around Hampstead, Swiss Cottage, and West Hampstead</p>
     <div class="badge">📍 NW3, London · Free · Non-profit</div>
+  </div>
+
+  <!-- How it works -->
+  <div class="how">
+    <h2>How it works</h2>
+    <ol>
+      <li>Pick your child's age and add the calendar to your phone in one tap.</li>
+      <li>Every event has the time, place, price and the provider's website.</li>
+      <li>It runs to the end of this term — leave your email and we'll send you the September one.</li>
+    </ol>
   </div>
 
   <!-- SECTION 1: Calendar -->
