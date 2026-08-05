@@ -26,12 +26,12 @@ Emails are never used for marketing and never shared.
 
 ## 🗺 Places featured
 
-- 📚 Swiss Cottage Library — free Rhyme Time & Stay & Play
-- 🏛️ Keats Community Library — Rhyme Time (£5)
+- 📚 Swiss Cottage Library — dedicated children's space, books and toys
+- 🏛️ Keats Community Library — volunteer-run, children's area, next to the Heath
 - 🧩 JW3 — sandpit, cafe, indoor play
-- 🎨 Camden Art Centre — green lawn, cafe, exhibitions
-- 🌳 Parliament Hill Fields + Splash Pool
-- 🧸 One O'Clock Club (Peggy Jay Centre) — free under-5s play
+- 🎨 Camden Art Centre — green lawn, cafe, exhibitions, family workshops
+- 🌳 Parliament Hill Playground + Splash Pool
+- 🧸 One O'Clock Club (Peggy Jay Centre) — under-5s indoor & outdoor play
 
 ## ⚙️ Development
 
