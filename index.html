@@ -221,7 +221,7 @@
 <script>
 // 🔧 SETUP: Enable Apps Script API at https://script.google.com/home/usersettings
 // then deploy docs/apps_script.gs as a Web App and paste the URL here:
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyG-ZF8gUO38EJWEWXHDGDGx85i7qHdS82H_JGgzZWrmw5jNrDnvmt8WmrohCZ_-1ijVQ/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRHHgmo49eRHU0zjTpLBbyKb4nlAiuyibOCDFcb5IOtx2UCkWXygheBw0mw4S6RRdbWQ/exec';
 
 const CALENDARS = {
   'baby': {
@@ -312,17 +312,11 @@ function submitEmail() {
     return;
   }
 
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload)
-  }).then(() => {
+  // Hidden iframe + form POST — the reliable pattern for Apps Script web apps
+  submitViaHiddenForm(payload, () => {
     input.value = '';
     document.getElementById('emailInput').placeholder = '✅ Saved!';
-    setTimeout(() => { document.getElementById('emailInput').placeholder = 'your@email.com (optional)'; }, 2000);
-  }).catch(() => {
-    document.getElementById('emailInput').placeholder = '⚠️ Error, try again';
+    setTimeout(() => { document.getElementById('emailInput').placeholder = 'your@email.com (optional)'; }, 2500);
   });
 }
 
@@ -347,24 +341,43 @@ function submitFeedback() {
     return;
   }
 
-  fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload)
-  }).then(() => {
+  submitViaHiddenForm(payload, () => {
     input.value = '';
     document.getElementById('feedbackEmail').value = '';
     document.getElementById('feedbackSuccess').classList.add('show');
     setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
-  }).catch(() => {
-    document.getElementById('feedbackSuccess').textContent = '⚠️ Error sending. Try again later.';
-    document.getElementById('feedbackSuccess').classList.add('show');
-    setTimeout(() => {
-      document.getElementById('feedbackSuccess').classList.remove('show');
-      document.getElementById('feedbackSuccess').textContent = '✅ Got it! Thanks for helping improve the calendar.';
-    }, 3000);
   });
+}
+
+// Submit JSON payload to Apps Script via a hidden iframe form.
+// Apps Script web apps 302-redirect POSTs; fetch+no-cors loses the body on redirect.
+function submitViaHiddenForm(payload, onDone) {
+  const iframe = document.createElement('iframe');
+  iframe.name = 'hidden_submit_iframe';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  iframe.onload = () => {
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      onDone();
+    }, 300);
+  };
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = APPS_SCRIPT_URL;
+  form.target = 'hidden_submit_iframe';
+
+  const input = document.createElement('input');
+  input.type = 'hidden';
+  input.name = 'payload';
+  input.value = JSON.stringify(payload);
+  form.appendChild(input);
+
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
 }
 </script>
 </body>
