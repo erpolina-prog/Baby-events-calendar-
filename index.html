@@ -68,6 +68,10 @@
   .calendar-btn:hover { background: #1557b0; }
   .calendar-btn .icon { font-size: 22px; }
 
+  .alt-cal { margin-top: 10px; font-size: 13px; color: #999; }
+  .alt-cal a { color: #1a73e8; text-decoration: none; font-weight: 500; }
+  .alt-cal a:hover { text-decoration: underline; }
+
   .event-preview { margin-top: 14px; }
   .event-preview h3 { font-size: 12px; color: #888; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
   .event-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
@@ -187,6 +191,7 @@
           <span class="icon">📅</span>
           Add to Google Calendar
         </a>
+        <div class="alt-cal">On iPhone or Mac? <a id="appleLink">Add to Apple Calendar</a></div>
       </div>
       <div class="event-preview" id="eventPreview">
         <h3>✨ What's included</h3>
@@ -282,6 +287,7 @@ const CALENDARS = {
   baby: {
     id: '8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
     link: 'https://calendar.google.com/calendar/u/0?cid=8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
+    appleLink: 'webcal://calendar.google.com/calendar/ical/8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com/public/basic.ics',
     tag: '👶 0–12 months',
     ageGroup: '0-12mo',
     events: [
@@ -302,6 +308,7 @@ const CALENDARS = {
   toddler: {
     id: '4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
     link: 'https://calendar.google.com/calendar/u/0?cid=4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
+    appleLink: 'webcal://calendar.google.com/calendar/ical/4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com/public/basic.ics',
     tag: '🚶 1–3 years',
     ageGroup: '12-36mo',
     events: [
@@ -340,6 +347,7 @@ function showCalendar(age) {
   if (!cal) return;
 
   $('calendarLink').href = cal.link;
+  $('appleLink').href = cal.appleLink;
 
   // Built from the hardcoded CALENDARS data above — no user input reaches here.
   const list = $('eventList');
