@@ -9,23 +9,31 @@
 <meta property="og:title" content="NW3 Baby Calendar 🍼">
 <meta property="og:description" content="Free Google Calendar with baby & toddler classes in Hampstead, Swiss Cottage & West Hampstead. Curated by a local mum.">
 <meta property="og:image" content="https://erpolina-prog.github.io/Baby-events-calendar-/og-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="NW3 Baby Calendar — free baby & toddler classes in Hampstead, Swiss Cottage & West Hampstead">
 <meta property="og:url" content="https://erpolina-prog.github.io/Baby-events-calendar-/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-  body { background: #f5f7fa; color: #1a1a2e; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f5f7fa; color: #1a1a2e; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  input, textarea, button { font-family: inherit; }
   .container { max-width: 560px; width: 100%; padding: 32px 20px; }
-  
+
   .hero { text-align: center; margin-bottom: 28px; }
   .hero .emoji { font-size: 48px; }
-  .hero h1 { font-size: 26px; margin: 10px 0 6px; color: #1a1a2e; }
+  .hero h1 { font-size: 26px; margin: 10px 0 6px; }
   .hero p { color: #666; font-size: 14px; line-height: 1.5; }
   .hero .badge { display: inline-block; background: #e8f4fd; color: #1a73e8; font-size: 13px; padding: 4px 12px; border-radius: 20px; margin-top: 8px; font-weight: 500; }
-  
+
   .card { background: white; border-radius: 16px; padding: 24px 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; }
-  .card h2 { font-size: 16px; margin-bottom: 14px; color: #1a1a2e; display: flex; align-items: center; gap: 8px; }
+  .card h2 { font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
   .card h2 .icon { font-size: 20px; }
 
   /* Age buttons */
@@ -35,7 +43,7 @@
     font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.2s; text-align: center; color: #333;
   }
   .age-btn:hover { border-color: #1a73e8; background: #f0f6ff; }
-  .age-btn.selected { border-color: #1a73e8; background: #1a73e8; color: white; }
+  .age-btn[aria-pressed="true"] { border-color: #1a73e8; background: #1a73e8; color: white; }
   .age-btn .age-label { font-size: 28px; display: block; margin-bottom: 4px; }
   .age-btn .age-sub { font-size: 12px; opacity: 0.7; }
 
@@ -77,8 +85,6 @@
   .contribute-btn { padding: 10px 20px; background: #34a853; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
   .contribute-btn:hover { background: #2d8f47; }
   .contribute-note { font-size: 12px; color: #999; margin-top: 8px; line-height: 1.4; }
-  .contribute-success { display: none; color: #34a853; font-size: 14px; font-weight: 500; margin-top: 8px; }
-  .contribute-success.show { display: block; }
 
   /* Email section */
   .email-section { margin-top: 14px; padding: 16px; background: #fafbfc; border-radius: 12px; border: 1px dashed #ddd; }
@@ -89,6 +95,14 @@
   .email-input-group button { padding: 10px 20px; background: #34a853; color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; }
   .email-input-group button:hover { background: #2d8f47; }
   .email-note { font-size: 11px; color: #aaa; margin-top: 6px; font-style: italic; }
+
+  button[disabled] { opacity: 0.6; cursor: default; }
+
+  /* Shared submit feedback */
+  .status { display: none; font-size: 13px; font-weight: 500; margin-top: 8px; line-height: 1.4; }
+  .status.show { display: block; }
+  .status.ok { color: #34a853; }
+  .status.err { color: #d93025; }
 
   .footer { text-align: center; padding: 24px 0 12px; color: #999; font-size: 12px; line-height: 1.6; }
   .footer a { color: #1a73e8; text-decoration: none; }
@@ -107,7 +121,7 @@
   <div class="hero">
     <div class="emoji">🍼</div>
     <h1>NW3 Baby Calendar</h1>
-    <p>Free Google Calendar with baby & toddler classes around Hampstead, Swiss Cottage, and West Hampstead</p>
+    <p>Free Google Calendar with baby &amp; toddler classes around Hampstead, Swiss Cottage, and West Hampstead</p>
     <div class="badge">📍 NW3, London · Free · Non-profit</div>
   </div>
 
@@ -115,21 +129,28 @@
   <div class="card">
     <h2><span class="icon">📅</span> Get your personalised calendar</h2>
     <div class="age-grid" id="ageGrid">
-      <button class="age-btn" data-age="baby">
+      <button type="button" class="age-btn" data-age="baby" aria-pressed="false">
         <span class="age-label">👶</span>
         0–12 months
         <span class="age-sub">newborn to first birthday</span>
       </button>
-      <button class="age-btn" data-age="toddler">
+      <button type="button" class="age-btn" data-age="toddler" aria-pressed="false">
         <span class="age-label">🚶</span>
         1–3 years
         <span class="age-sub">walking to preschool</span>
       </button>
     </div>
+    <noscript>
+      <p style="font-size:13px;color:#555;line-height:1.5;margin-top:12px;">
+        JavaScript is off, so the picker won't work. Add a calendar directly:
+        <a href="https://calendar.google.com/calendar/u/0?cid=8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com">0–12 months</a> ·
+        <a href="https://calendar.google.com/calendar/u/0?cid=4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com">1–3 years</a>
+      </p>
+    </noscript>
 
     <div class="result-box" id="resultBox">
       <div style="text-align: center;">
-        <a class="calendar-btn" id="calendarLink" target="_blank">
+        <a class="calendar-btn" id="calendarLink" target="_blank" rel="noopener">
           <span class="icon">📅</span>
           Add to Google Calendar
         </a>
@@ -141,9 +162,10 @@
       <div class="email-section">
         <p>📬 We'll also send you a list of <strong>free places to hang out with your baby</strong> in NW3 — parks, libraries, cafes. No marketing, ever — this is a free pet project.</p>
         <div class="email-input-group">
-          <input type="email" id="emailInput" placeholder="your@email.com (optional)" />
-          <button onclick="submitEmail()">Send me the list →</button>
+          <input type="email" id="emailInput" placeholder="your@email.com (optional)" autocomplete="email" />
+          <button type="button" id="emailBtn">Send me the list →</button>
         </div>
+        <div class="status" id="emailStatus" role="status" aria-live="polite"></div>
         <div class="email-note">Your email will not be used for marketing or shared with anyone. Free community project.</div>
       </div>
     </div>
@@ -155,43 +177,43 @@
 
     <div class="place-card">
       <h3>📚 Swiss Cottage Library</h3>
-      <div class="place-addr">88 Avenue Road, NW3 3HA · <a href="https://www.google.com/maps/search/?api=1&query=88%20Avenue%20Road%2C%20NW3%203HA" target="_blank">📍 Map</a></div>
-      <div class="place-desc">Free Rhyme Time (Tue/Fri 10:30), Stay & Play (Wed 10:30), dedicated children's library with books and toys. Warm, quiet space.</div>
+      <div class="place-addr">88 Avenue Road, NW3 3HA · <a href="https://www.google.com/maps/search/?api=1&amp;query=88%20Avenue%20Road%2C%20NW3%203HA" target="_blank" rel="noopener">📍 Map</a></div>
+      <div class="place-desc">Free Rhyme Time (Tue/Fri 10:30), Stay &amp; Play (Wed 10:30), dedicated children's library with books and toys. Warm, quiet space.</div>
       <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Indoor</span></div>
     </div>
 
     <div class="place-card">
       <h3>🏛️ Keats Community Library</h3>
-      <div class="place-addr">10 Keats Grove, NW3 2RR · <a href="https://www.google.com/maps/search/?api=1&query=10%20Keats%20Grove%2C%20NW3%202RR" target="_blank">📍 Map</a></div>
+      <div class="place-addr">10 Keats Grove, NW3 2RR · <a href="https://www.google.com/maps/search/?api=1&amp;query=10%20Keats%20Grove%2C%20NW3%202RR" target="_blank" rel="noopener">📍 Map</a></div>
       <div class="place-desc">Community library in a lovely old building. Rhyme Time Tue/Fri 11:00 (£5), dedicated children's area. Very family-friendly.</div>
       <div class="place-tags"><span class="place-tag">£5</span><span class="place-tag">Community feel</span></div>
     </div>
 
     <div class="place-card">
       <h3>🧩 JW3</h3>
-      <div class="place-addr">341-351 Finchley Road, NW3 6ET · <a href="https://www.google.com/maps/search/?api=1&query=341-351%20Finchley%20Road%2C%20NW3%206ET" target="_blank">📍 Map</a></div>
+      <div class="place-addr">341-351 Finchley Road, NW3 6ET · <a href="https://www.google.com/maps/search/?api=1&amp;query=341-351%20Finchley%20Road%2C%20NW3%206ET" target="_blank" rel="noopener">📍 Map</a></div>
       <div class="place-desc">Big sandpit on the lower ground floor! Also a cafe, library, and children's events throughout the week. Indoor play area, warm and spacious.</div>
       <div class="place-tags"><span class="place-tag">Sandpit</span><span class="place-tag">Cafe</span><span class="place-tag">Indoor</span></div>
     </div>
 
     <div class="place-card">
       <h3>🎨 Camden Art Centre</h3>
-      <div class="place-addr">Arkwright Road, NW3 6DG · <a href="https://www.google.com/maps/search/?api=1&query=Arkwright%20Road%2C%20NW3%206DG" target="_blank">📍 Map</a></div>
+      <div class="place-addr">Arkwright Road, NW3 6DG · <a href="https://www.google.com/maps/search/?api=1&amp;query=Arkwright%20Road%2C%20NW3%206DG" target="_blank" rel="noopener">📍 Map</a></div>
       <div class="place-desc">Beautiful green lawn where you can sit with a coffee while babies play. Art exhibitions, family workshops on weekends. Calm, creative atmosphere.</div>
       <div class="place-tags"><span class="place-tag">Green space</span><span class="place-tag">Free</span><span class="place-tag">Cafe</span></div>
     </div>
 
     <div class="place-card">
       <h3>🌳 Parliament Hill Fields + Splash Pool</h3>
-      <div class="place-addr">Parliament Hill, NW5 (near Lido) · <a href="https://www.google.com/maps/search/?api=1&query=Parliament%20Hill%20Fields%2C%20London%20NW5" target="_blank">📍 Map</a></div>
+      <div class="place-addr">Parliament Hill, NW5 (near Lido) · <a href="https://www.google.com/maps/search/?api=1&amp;query=Parliament%20Hill%20Fields%2C%20London%20NW5" target="_blank" rel="noopener">📍 Map</a></div>
       <div class="place-desc">Huge green fields next to the Lido with a paddling/splash pool for little ones in summer, playground, and wide open space to run around. Perfect picnic spot with views of the London skyline.</div>
       <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Outdoor</span><span class="place-tag">Splash pool</span><span class="place-tag">Summer</span></div>
     </div>
 
     <div class="place-card">
       <h3>🧸 One O'Clock Club — Peggy Jay Centre</h3>
-      <div class="place-addr">Nassington Road, NW3 2TX (Parliament Hill) · <a href="https://www.google.com/maps/search/?api=1&query=Nassington%20Road%2C%20London%20NW3%202TX" target="_blank">📍 Map</a></div>
-      <div class="place-desc">Free indoor & outdoor play for under-5s. Baby area, small world play, construction, sand pit, climbing frame. Mon–Fri: morning session (10am–12pm, nominal charge) and afternoon session (1pm–3pm, voluntary charge). Right next to the Lido!</div>
+      <div class="place-addr">Nassington Road, NW3 2TX (Parliament Hill) · <a href="https://www.google.com/maps/search/?api=1&amp;query=Nassington%20Road%2C%20London%20NW3%202TX" target="_blank" rel="noopener">📍 Map</a></div>
+      <div class="place-desc">Free indoor &amp; outdoor play for under-5s. Baby area, small world play, construction, sand pit, climbing frame. Mon–Fri: morning session (10am–12pm, nominal charge) and afternoon session (1pm–3pm, voluntary charge). Right next to the Lido!</div>
       <div class="place-tags"><span class="place-tag">Free/Voluntary</span><span class="place-tag">Under 5s</span><span class="place-tag">Indoor+Outdoor</span></div>
     </div>
   </div>
@@ -200,16 +222,16 @@
   <div class="card">
     <h2><span class="icon">💡</span> Contribute</h2>
     <p style="font-size: 13px; color: #555; line-height: 1.5; margin-bottom: 12px;">
-      This is a non-profit pet project by one of the mums in the neighbourhood. 
+      This is a non-profit pet project by one of the mums in the neighbourhood.
       Know a place or class that's not included? Got feedback? Drop it below — we'll add it! ✨
     </p>
     <textarea class="contribute-input" id="feedbackInput" placeholder="Tell us about a place, class, or anything else..."></textarea>
     <div class="contribute-row">
-      <input type="email" id="feedbackEmail" placeholder="your@email.com (if you want a reply)" />
-      <button class="contribute-btn" onclick="submitFeedback()">Send →</button>
+      <input type="email" id="feedbackEmail" placeholder="your@email.com (if you want a reply)" autocomplete="email" />
+      <button type="button" class="contribute-btn" id="feedbackBtn">Send →</button>
     </div>
     <div class="contribute-note">No spam, no marketing — just making this better for all NW3 families ❤️</div>
-    <div class="contribute-success" id="feedbackSuccess">✅ Got it! Thanks for helping improve the calendar.</div>
+    <div class="status" id="feedbackStatus" role="status" aria-live="polite"></div>
   </div>
 
   <div class="footer">
@@ -219,15 +241,15 @@
 </div>
 
 <script>
-// 🔧 SETUP: Enable Apps Script API at https://script.google.com/home/usersettings
-// then deploy docs/apps_script.gs as a Web App and paste the URL here:
+// Apps Script Web App deployment. To redeploy: see apps-script/ and README.md.
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzRHHgmo49eRHU0zjTpLBbyKb4nlAiuyibOCDFcb5IOtx2UCkWXygheBw0mw4S6RRdbWQ/exec';
 
 const CALENDARS = {
-  'baby': {
+  baby: {
     id: '8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
     link: 'https://calendar.google.com/calendar/u/0?cid=8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
     tag: '👶 0–12 months',
+    ageGroup: '0-12mo',
     events: [
       { emoji: '🎵', name: 'Hartbeeps Baby Beeps & Bells', detail: 'Kensal Green · Primrose Hill · West Hampstead' },
       { emoji: '🎵', name: 'Family Music (Curiouser)', detail: 'Hampstead · Mon 10:00' },
@@ -238,20 +260,21 @@ const CALENDARS = {
       { emoji: '🏊', name: 'Parent & Baby Swim', detail: 'Getset Swim · Fri 10:00+11:00' },
       { emoji: '🏊', name: 'Swimbies Dippers (3–12m)', detail: 'Swiss Cottage · Mon 12:00' },
       { emoji: '🎵', name: 'Mini Mozart Babies', detail: 'Hampstead · Fri 10:25' },
-      { emoji: '👶', name: 'Baby Play + Baby Bonding', detail: 'Camden Children\'s Centres · free' },
+      { emoji: '👶', name: 'Baby Play + Baby Bonding', detail: "Camden Children's Centres · free" },
       { emoji: '👫', name: 'Fun for All', detail: 'Camden centres · under 5s · free' },
       { emoji: '🎵', name: 'Rhyme Time', detail: 'Swiss Cottage, Kentish Town, Keats & more' },
     ]
   },
-  'toddler': {
+  toddler: {
     id: '4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
     link: 'https://calendar.google.com/calendar/u/0?cid=4143f3280872be0a3a1e7260fe5d544fdaebe34c3f0c503268acf64f4b4b5f89@group.calendar.google.com',
     tag: '🚶 1–3 years',
+    ageGroup: '12-36mo',
     events: [
       { emoji: '🐦', name: 'Little Gym — Birds', detail: 'Hampstead · 6 days a week · 10–18mo' },
       { emoji: '🎵', name: 'Hartbeeps Happy House', detail: 'West Hampstead · Wed · walkers+' },
       { emoji: '🎵', name: 'Hartbeeps Baby Beeps', detail: 'West Hampstead · Wed & Primrose Hill Tue' },
-      { emoji: '🚶', name: 'Toddler Time', detail: 'Camden Children\'s Centres · under 2s · free' },
+      { emoji: '🚶', name: 'Toddler Time', detail: "Camden Children's Centres · under 2s · free" },
       { emoji: '👫', name: 'Fun for All', detail: 'Camden centres · under 5s · free' },
       { emoji: '🏊', name: 'Parent & Toddler Swim', detail: 'Getset Swim · Fri 10:00+11:00' },
       { emoji: '🏊', name: 'Swimbies Splashers & Paddlers', detail: 'Kentish Town · 13mo–3yrs · £43.50/mo' },
@@ -261,12 +284,15 @@ const CALENDARS = {
   }
 };
 
+const $ = (id) => document.getElementById(id);
 let selectedAge = null;
 
-document.querySelectorAll('.age-btn').forEach(btn => {
+/* ---------- Calendar picker ---------- */
+
+const ageButtons = document.querySelectorAll('.age-btn');
+ageButtons.forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.age-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
+    ageButtons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
     selectedAge = btn.dataset.age;
     showCalendar(selectedAge);
   });
@@ -274,13 +300,12 @@ document.querySelectorAll('.age-btn').forEach(btn => {
 
 function showCalendar(age) {
   const cal = CALENDARS[age];
-  const resultBox = document.getElementById('resultBox');
-  resultBox.classList.add('show');
+  if (!cal) return;
 
-  document.getElementById('calendarLink').href = cal.link;
+  $('calendarLink').href = cal.link;
 
-  const eventList = document.getElementById('eventList');
-  eventList.innerHTML = cal.events.map(e =>
+  // Built from the hardcoded CALENDARS data above — no user input reaches here.
+  $('eventList').innerHTML = cal.events.map(e =>
     `<div class="event-item">
       <span class="ev-emoji">${e.emoji}</span>
       <div>
@@ -290,94 +315,145 @@ function showCalendar(age) {
     </div>`
   ).join('');
 
+  const resultBox = $('resultBox');
+  resultBox.classList.add('show');
   resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function submitEmail() {
-  const input = document.getElementById('emailInput');
+/* ---------- Status helpers ---------- */
+
+function setStatus(el, message, kind, clearAfter) {
+  el.textContent = message;
+  el.className = 'status show ' + kind;
+  if (clearAfter) {
+    setTimeout(() => { el.className = 'status'; el.textContent = ''; }, clearAfter);
+  }
+}
+
+/* ---------- Forms ---------- */
+
+$('emailBtn').addEventListener('click', submitEmail);
+$('feedbackBtn').addEventListener('click', submitFeedback);
+
+async function submitEmail() {
+  const input = $('emailInput');
+  const status = $('emailStatus');
+  const btn = $('emailBtn');
   const email = input.value.trim();
-  if (!email) return;
 
-  const payload = {
-    type: 'email',
-    email: email,
-    ageGroup: selectedAge === 'baby' ? '0-12mo' : (selectedAge === 'toddler' ? '12-36mo' : 'unknown'),
-    source: 'places_list'
-  };
-
-  if (APPS_SCRIPT_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
-    input.value = '';
-    document.getElementById('emailInput').placeholder = 'Backend not connected yet — coming soon!';
-    setTimeout(() => { document.getElementById('emailInput').placeholder = 'your@email.com (optional)'; }, 2000);
+  if (!email) {
+    setStatus(status, 'Enter an email address first.', 'err', 4000);
+    return;
+  }
+  if (!input.checkValidity()) {
+    setStatus(status, "That doesn't look like a valid email address.", 'err', 4000);
     return;
   }
 
-  // Hidden iframe + form POST — the reliable pattern for Apps Script web apps
-  submitViaHiddenForm(payload, () => {
+  btn.disabled = true;
+  setStatus(status, 'Sending…', 'ok');
+  try {
+    await postToBackend({
+      type: 'email',
+      email: email,
+      ageGroup: selectedAge ? CALENDARS[selectedAge].ageGroup : 'unknown',
+      source: 'places_list'
+    });
     input.value = '';
-    document.getElementById('emailInput').placeholder = '✅ Saved!';
-    setTimeout(() => { document.getElementById('emailInput').placeholder = 'your@email.com (optional)'; }, 2500);
-  });
+    setStatus(status, "✅ Saved! We'll send the list soon.", 'ok', 5000);
+  } catch (err) {
+    setStatus(status, "❌ Couldn't save that — please try again in a moment.", 'err', 6000);
+  } finally {
+    btn.disabled = false;
+  }
 }
 
-function submitFeedback() {
-  const input = document.getElementById('feedbackInput');
-  const email = document.getElementById('feedbackEmail').value.trim();
+async function submitFeedback() {
+  const input = $('feedbackInput');
+  const emailField = $('feedbackEmail');
+  const status = $('feedbackStatus');
+  const btn = $('feedbackBtn');
   const text = input.value.trim();
-  if (!text) return;
 
-  const payload = {
-    type: 'feedback',
-    feedback: text,
-    email: email,
-    source: 'landing'
-  };
-
-  if (APPS_SCRIPT_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
-    input.value = '';
-    document.getElementById('feedbackEmail').value = '';
-    document.getElementById('feedbackSuccess').classList.add('show');
-    setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
+  if (!text) {
+    setStatus(status, 'Write something first 🙂', 'err', 4000);
+    return;
+  }
+  if (emailField.value.trim() && !emailField.checkValidity()) {
+    setStatus(status, "That doesn't look like a valid email address.", 'err', 4000);
     return;
   }
 
-  submitViaHiddenForm(payload, () => {
+  btn.disabled = true;
+  setStatus(status, 'Sending…', 'ok');
+  try {
+    await postToBackend({
+      type: 'feedback',
+      feedback: text,
+      email: emailField.value.trim(),
+      source: 'landing'
+    });
     input.value = '';
-    document.getElementById('feedbackEmail').value = '';
-    document.getElementById('feedbackSuccess').classList.add('show');
-    setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
-  });
+    emailField.value = '';
+    setStatus(status, '✅ Got it! Thanks for helping improve the calendar.', 'ok', 5000);
+  } catch (err) {
+    setStatus(status, "❌ Couldn't send that — please try again in a moment.", 'err', 6000);
+  } finally {
+    btn.disabled = false;
+  }
 }
 
-// Submit JSON payload to Apps Script via a hidden iframe form.
-// Apps Script web apps 302-redirect POSTs; fetch+no-cors loses the body on redirect.
-function submitViaHiddenForm(payload, onDone) {
-  const iframe = document.createElement('iframe');
-  iframe.name = 'hidden_submit_iframe';
-  iframe.style.display = 'none';
-  document.body.appendChild(iframe);
+/**
+ * POST a JSON payload to the Apps Script web app through a hidden iframe.
+ *
+ * Apps Script 302-redirects POSTs to googleusercontent.com, which strips the
+ * body under fetch/no-cors — the iframe + form pattern is the one that survives
+ * the redirect. Resolves when Apps Script replies, rejects on timeout.
+ */
+function postToBackend(payload, timeoutMs = 12000) {
+  return new Promise((resolve, reject) => {
+    const name = 'submit_iframe_' + Math.random().toString(36).slice(2);
+    const iframe = document.createElement('iframe');
+    iframe.name = name;
+    iframe.src = 'about:blank';
+    iframe.style.display = 'none';
 
-  iframe.onload = () => {
-    setTimeout(() => {
-      document.body.removeChild(iframe);
-      onDone();
-    }, 300);
-  };
+    let settled = false;
+    const finish = (err) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      setTimeout(() => iframe.remove(), 0);
+      err ? reject(err) : resolve();
+    };
+    const timer = setTimeout(() => finish(new Error('Request timed out')), timeoutMs);
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = APPS_SCRIPT_URL;
-  form.target = 'hidden_submit_iframe';
+    // A freshly appended iframe fires `load` once for its initial about:blank
+    // document. Submitting only after that means the *next* load is the real
+    // response — without this the old code reported success immediately.
+    iframe.addEventListener('load', function onReady() {
+      iframe.removeEventListener('load', onReady);
+      iframe.addEventListener('load', () => finish(null));
 
-  const input = document.createElement('input');
-  input.type = 'hidden';
-  input.name = 'payload';
-  input.value = JSON.stringify(payload);
-  form.appendChild(input);
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = APPS_SCRIPT_URL;
+      form.target = name;
+      form.style.display = 'none';
 
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
+      const field = document.createElement('input');
+      field.type = 'hidden';
+      field.name = 'payload';
+      field.value = JSON.stringify(payload);
+      form.appendChild(field);
+
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+    });
+
+    document.body.appendChild(iframe);
+  });
 }
 </script>
 </body>

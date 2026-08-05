@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e7effa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1200" fill="#ffffff"/>
+  <!-- artwork band: y 285..915 (630 tall), extracted by a centre crop -->
+  <g transform="translate(0,285)">
+    <rect width="1200" height="630" fill="url(#bg)"/>
+    <rect x="0" y="0" width="1200" height="10" fill="#1a73e8"/>
+
+    <text x="600" y="170" text-anchor="middle" font-size="100">&#127868;</text>
+
+    <text x="600" y="296" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+          font-size="84" font-weight="700" fill="#1a1a2e" letter-spacing="-1">NW3 Baby Calendar</text>
+
+    <text x="600" y="362" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+          font-size="34" fill="#5f6b7a">Free baby &amp; toddler classes in Hampstead,</text>
+    <text x="600" y="407" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+          font-size="34" fill="#5f6b7a">Swiss Cottage &amp; West Hampstead</text>
+
+    <rect x="356" y="455" width="488" height="60" rx="30" fill="#e8f4fd"/>
+    <text x="600" y="494" text-anchor="middle" font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
+          font-size="26" font-weight="500" fill="#1a73e8">&#128205; NW3, London &#183; Free &#183; Non-profit</text>
+
+    <text x="600" y="580" text-anchor="middle" font-size="32" letter-spacing="18">&#127925;&#127912;&#127946;&#128218;&#127795;</text>
+  </g>
+</svg>
