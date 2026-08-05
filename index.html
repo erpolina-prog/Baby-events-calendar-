@@ -173,17 +173,17 @@
     </div>
 
     <div class="place-card">
-      <h3>🌳 Hampstead Heath</h3>
-      <div class="place-addr">NW3 (multiple entrances)</div>
-      <div class="place-desc">Huge green space with ponds, playgrounds (Parliament Hill, Highgate), and the Heath cafe. Perfect for picnics and baby's first nature experience.</div>
-      <div class="place-tags"><span class="place-tag">Outdoor</span><span class="place-tag">Free</span><span class="place-tag">Playground</span></div>
+      <h3>🌳 Parliament Hill Fields + Splash Pool</h3>
+      <div class="place-addr">Parliament Hill, NW5 (entrance near Lido)</div>
+      <div class="place-desc">Huge green fields next to the Lido with a paddling/splash pool for little ones in summer, playground, and wide open space to run around. Perfect picnic spot with views of the London skyline.</div>
+      <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Outdoor</span><span class="place-tag">Splash pool</span><span class="place-tag">Summer</span></div>
     </div>
 
     <div class="place-card">
-      <h3>🎪 O2 Centre Soft Play</h3>
-      <div class="place-addr">255 Finchley Road, NW3 6LU</div>
-      <div class="place-desc">Free soft play area in the shopping centre, right next to Mini Mozart classes. Warm indoor space, free, with cafe nearby.</div>
-      <div class="place-tags"><span class="place-tag">Free</span><span class="place-tag">Soft play</span><span class="place-tag">Indoor</span></div>
+      <h3>🧸 One O'Clock Club — Peggy Jay Centre</h3>
+      <div class="place-addr">Nassington Road, NW3 2TX (Parliament Hill Fields)</div>
+      <div class="place-desc">Free indoor & outdoor play for under-5s. Baby area, small world play, construction, sand pit, climbing frame. Mon–Fri: morning session (10am–12pm, nominal charge) and afternoon session (1pm–3pm, voluntary charge). Right next to the Lido!</div>
+      <div class="place-tags"><span class="place-tag">Free/Voluntary</span><span class="place-tag">Under 5s</span><span class="place-tag">Indoor+Outdoor</span></div>
     </div>
   </div>
 
@@ -210,6 +210,9 @@
 </div>
 
 <script>
+// 🔧 SETUP: После деплоя Apps Script, замени URL ниже
+const APPS_SCRIPT_URL = 'YOUR_DEPLOYMENT_URL_HERE'; // вставь URL после деплоя
+
 const CALENDARS = {
   'baby': {
     id: '8ba089b474c0eb04a53c86824aff7e78faefd28fc7e57bb01cad2e476c28ff34@group.calendar.google.com',
@@ -329,9 +332,36 @@ function submitEmail() {
   const input = document.getElementById('emailInput');
   const email = input.value.trim();
   if (!email) return;
-  // In production: send to backend
-  input.value = '';
-  alert('✅ We\'ll send the free places list to ' + email + '!');
+  
+  const ageGroup = currentAge ? (currentAge.group === 'baby' ? '0-12mo' : '12-36mo') : 'unknown';
+  
+  const payload = {
+    type: 'email',
+    email: email,
+    ageGroup: ageGroup,
+    source: 'places_list'
+  };
+  
+  if (APPS_SCRIPT_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
+    // Not deployed yet — just log
+    console.log('Would send:', payload);
+    input.value = '';
+    alert('✅ Thanks! (Backend not connected yet — deployed soon)');
+    return;
+  }
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    input.value = '';
+    alert('✅ We\'ll send the free places list to ' + email + '!');
+  }).catch(err => {
+    console.error('Error:', err);
+    alert('⚠️ Something went wrong. Please try again.');
+  });
 }
 
 function submitFeedback() {
@@ -339,11 +369,37 @@ function submitFeedback() {
   const email = document.getElementById('feedbackEmail').value.trim();
   const text = input.value.trim();
   if (!text) return;
-  // In production: send to backend
-  input.value = '';
-  document.getElementById('feedbackEmail').value = '';
-  document.getElementById('feedbackSuccess').classList.add('show');
-  setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
+  
+  const payload = {
+    type: 'feedback',
+    feedback: text,
+    email: email,
+    source: 'landing'
+  };
+  
+  if (APPS_SCRIPT_URL === 'YOUR_DEPLOYMENT_URL_HERE') {
+    console.log('Would send:', payload);
+    input.value = '';
+    document.getElementById('feedbackEmail').value = '';
+    document.getElementById('feedbackSuccess').classList.add('show');
+    setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
+    return;
+  }
+  
+  fetch(APPS_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    input.value = '';
+    document.getElementById('feedbackEmail').value = '';
+    document.getElementById('feedbackSuccess').classList.add('show');
+    setTimeout(() => document.getElementById('feedbackSuccess').classList.remove('show'), 4000);
+  }).catch(err => {
+    console.error('Error:', err);
+    alert('⚠️ Something went wrong. Please try again.');
+  });
 }
 </script>
 </body>
