@@ -72,6 +72,25 @@
   .alt-cal a { color: #1a73e8; text-decoration: none; font-weight: 500; }
   .alt-cal a:hover { text-decoration: underline; }
 
+  /* Usage tips — native details/summary element, no JS */
+  .tips { margin-top: 16px; border-top: 1px solid #f0f0f0; padding-top: 12px; text-align: left; }
+  .tips > summary {
+    list-style: none; cursor: pointer; color: #1a73e8;
+    font-size: 13px; font-weight: 500; padding: 2px 0; text-align: center;
+  }
+  .tips > summary::-webkit-details-marker { display: none; }
+  .tips > summary::after { content: ' ▾'; display: inline-block; transition: transform 0.2s; }
+  .tips[open] > summary::after { transform: rotate(180deg); }
+  .tips > summary:hover { color: #1557b0; }
+  .tips ol { list-style: none; counter-reset: tip; margin-top: 12px; }
+  .tips li { counter-increment: tip; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #555; padding: 4px 0; }
+  .tips li::before {
+    content: counter(tip); flex-shrink: 0; width: 19px; height: 19px; margin-top: 1px;
+    border-radius: 50%; background: #e8f4fd; color: #1a73e8;
+    font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;
+  }
+  .tips-fig { display: block; max-width: 100%; height: auto; margin: 14px auto 4px; }
+
   .event-preview { margin-top: 14px; }
   .event-preview h3 { font-size: 12px; color: #888; margin-bottom: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
   .event-item { display: flex; gap: 10px; padding: 6px 0; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
@@ -193,6 +212,43 @@
         </a>
         <div class="alt-cal">On iPhone or Mac? <a id="appleLink">Add to Apple Calendar</a></div>
       </div>
+
+      <details class="tips">
+        <summary>Don't want it cluttering your calendar?</summary>
+        <ol>
+          <li>It arrives as a <strong>separate calendar</strong> in your list — your own events aren't touched.</li>
+          <li><strong>Untick it to hide it</strong>, and tick it again when you're planning your week.</li>
+          <li><strong>Give it a soft colour</strong> so it doesn't shout over everything else.</li>
+        </ol>
+        <svg class="tips-fig" width="320" height="150" viewBox="0 0 320 150" role="img"
+             font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+             xmlns="http://www.w3.org/2000/svg">
+          <title>A calendar list showing the baby calendar ticked and the toddler calendar unticked, with a colour palette below and a muted grey selected</title>
+          <rect x="0.5" y="0.5" width="319" height="149" rx="10" fill="#ffffff" stroke="#e6ecf3"/>
+
+          <rect x="16" y="22" width="16" height="16" rx="3" fill="#1a73e8"/>
+          <path d="M20 30 l3 3 l6 -7" fill="none" stroke="#ffffff" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="42" y="34" font-size="12.5" fill="#1a1a2e">👶 NW3 Baby (0–12mo)</text>
+
+          <rect x="16.5" y="54.5" width="15" height="15" rx="3" fill="#ffffff" stroke="#c0c7d0"/>
+          <text x="42" y="66" font-size="12.5" fill="#8a94a3">🚶 NW3 Toddler (12–36mo)</text>
+
+          <line x1="16" y1="88" x2="304" y2="88" stroke="#f0f0f0"/>
+          <text x="16" y="105" font-size="10.5" fill="#999999" letter-spacing="0.6">CALENDAR COLOUR</text>
+
+          <circle cx="25" cy="126" r="9" fill="#d93025"/>
+          <circle cx="51" cy="126" r="9" fill="#e8710a"/>
+          <circle cx="77" cy="126" r="9" fill="#f9ab00"/>
+          <circle cx="103" cy="126" r="9" fill="#34a853"/>
+          <circle cx="129" cy="126" r="9" fill="#1a73e8"/>
+          <circle cx="155" cy="126" r="9" fill="#a142f4"/>
+          <circle cx="181" cy="126" r="9" fill="#9aa0a6"/>
+          <path d="M177 126 l3 3 l6 -7" fill="none" stroke="#ffffff" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="198" y="130" font-size="11" fill="#999999">← easier on the eye</text>
+        </svg>
+      </details>
       <div class="event-preview" id="eventPreview">
         <h3>✨ What's included</h3>
         <div id="eventList"></div>
