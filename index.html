@@ -38,10 +38,12 @@
   .how { background: #fff; border: 1px solid #e6ecf3; border-radius: 14px; padding: 14px 16px; margin-bottom: 16px; }
   .how h2 { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: #8a94a3; font-weight: 600; margin-bottom: 10px; }
   .how ol { list-style: none; counter-reset: step; }
-  .how li { counter-increment: step; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #555; padding: 4px 0; }
+  /* Marker is positioned, not a flex item — inside a flex row every text run and
+     every bold span becomes its own flex item, which tears sentences apart. */
+  .how li { counter-increment: step; position: relative; padding: 4px 0 4px 29px; font-size: 13px; line-height: 1.5; color: #555; }
   .how li::before {
-    content: counter(step); flex-shrink: 0; width: 19px; height: 19px; margin-top: 1px;
-    border-radius: 50%; background: #e8f4fd; color: #1a73e8;
+    content: counter(step); position: absolute; left: 0; top: 5px;
+    width: 19px; height: 19px; border-radius: 50%; background: #e8f4fd; color: #1a73e8;
     font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;
   }
   .card h2 { font-size: 16px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
@@ -83,10 +85,10 @@
   .tips[open] > summary::after { transform: rotate(180deg); }
   .tips > summary:hover { color: #1557b0; }
   .tips ol { list-style: none; counter-reset: tip; margin-top: 12px; }
-  .tips li { counter-increment: tip; display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: #555; padding: 4px 0; }
+  .tips li { counter-increment: tip; position: relative; padding: 4px 0 4px 29px; font-size: 13px; line-height: 1.5; color: #555; }
   .tips li::before {
-    content: counter(tip); flex-shrink: 0; width: 19px; height: 19px; margin-top: 1px;
-    border-radius: 50%; background: #e8f4fd; color: #1a73e8;
+    content: counter(tip); position: absolute; left: 0; top: 5px;
+    width: 19px; height: 19px; border-radius: 50%; background: #e8f4fd; color: #1a73e8;
     font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center;
   }
   .tips-fig { display: block; max-width: 100%; height: auto; margin: 14px auto 4px; }
